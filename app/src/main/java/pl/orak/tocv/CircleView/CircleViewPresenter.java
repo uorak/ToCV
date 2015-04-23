@@ -1,6 +1,5 @@
 package pl.orak.tocv.CircleView;
 
-import pl.orak.tocv.CircleView.utils.CircleParams;
 import pl.orak.tocv.CircleView.utils.Touch;
 
 /**
@@ -17,13 +16,14 @@ public class CircleViewPresenter {
     }
 
     public void onTouch(Touch touch) {
-        CircleParams circleParams = circleView.getCircleParams();
-        if (!touchedDown && circleParams.pointIn(touch.getPoint()) ) {
+        if (!touchedDown && (touch.getTouchMode()== Touch.TouchMode.DOWN || touch.getTouchMode()== Touch.TouchMode.MOVE) && circleView.getCircleParams().pointIn(touch.getPoint()) ) {
             circleView.onPressedDown();
+            touchedDown = true;
         }
-        if(touchedDown && touch.getTouchMode()== Touch.TouchMode.UP){
+        else if(touchedDown && (touch.getTouchMode()== Touch.TouchMode.UP || (touch.getTouchMode()== Touch.TouchMode.MOVE && !circleView.getCircleParams().pointIn(touch.getPoint())))){
             circleView.onPressedUp();
+            touchedDown = false;
         }
-        touchedDown = touch.getTouchMode() == Touch.TouchMode.DOWN;
+
     }
 }

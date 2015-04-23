@@ -26,5 +26,5 @@ public class Touch {
         return touchMode;
     }
 
-    public enum TouchMode {DOWN, UP}
+    public enum TouchMode {DOWN, MOVE, UP}
 }
