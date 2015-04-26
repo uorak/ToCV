@@ -18,6 +18,10 @@ android {
         }
     }
 
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
 }
 
 
@@ -26,5 +30,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:1.+"
+    compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.makeramen:roundedimageview:2.0.1'
 }

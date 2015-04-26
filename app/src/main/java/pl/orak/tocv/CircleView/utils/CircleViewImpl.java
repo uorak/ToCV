@@ -69,4 +69,5 @@ public class CircleViewImpl extends RoundedImageView implements CircleView {
         float radius = getWidth()/2;
         return new CircleParams(new Point(x,y), radius);
     }
+
 }
