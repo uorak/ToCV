@@ -1,4 +1,4 @@
-package pl.orak.tocv.CircleView.utils;
+package pl.orak.tocv.CircleView;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,8 +7,9 @@ import android.view.MotionEvent;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 
-import pl.orak.tocv.CircleView.CircleView;
-import pl.orak.tocv.CircleView.CircleViewPresenter;
+import pl.orak.tocv.CircleUtils.CircleParams;
+import pl.orak.tocv.CircleUtils.Point;
+import pl.orak.tocv.CircleUtils.Touch;
 
 /**
  * Created by Tomek on 2015-04-23.
@@ -16,6 +17,7 @@ import pl.orak.tocv.CircleView.CircleViewPresenter;
 public class CircleViewImpl extends RoundedImageView implements CircleView {
     public static final int PRESS_ANIMATION_DURATION = 50;
     private CircleViewPresenter presenter;
+    private CircleParams circleParams;
 
     public CircleViewImpl(Context context) {
         super(context);
@@ -34,6 +36,7 @@ public class CircleViewImpl extends RoundedImageView implements CircleView {
 
     private void init(){
         presenter = new CircleViewPresenter(this);
+        setOval(true);
     }
 
     @Override
@@ -64,10 +67,10 @@ public class CircleViewImpl extends RoundedImageView implements CircleView {
 
     @Override
     public CircleParams getCircleParams() {
-        float x = (getRight()-getLeft())/2;
-        float y = (getBottom()-getTop())/2;
-        float radius = getWidth()/2;
-        return new CircleParams(new Point(x,y), radius);
+        if (circleParams==null){
+            circleParams= new CircleParams(this);
+        }
+        return circleParams;
     }
 
 }

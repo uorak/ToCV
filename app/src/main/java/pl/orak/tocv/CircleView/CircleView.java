@@ -1,6 +1,6 @@
 package pl.orak.tocv.CircleView;
 
-import pl.orak.tocv.CircleView.utils.CircleParams;
+import pl.orak.tocv.CircleUtils.CircleParams;
 
 /**
  * Created by Tomek on 2015-04-23.

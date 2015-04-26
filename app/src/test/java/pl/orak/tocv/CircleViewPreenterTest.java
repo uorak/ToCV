@@ -7,9 +7,9 @@ import org.mockito.MockitoAnnotations;
 
 import pl.orak.tocv.CircleView.CircleView;
 import pl.orak.tocv.CircleView.CircleViewPresenter;
-import pl.orak.tocv.CircleView.utils.CircleParams;
-import pl.orak.tocv.CircleView.utils.Point;
-import pl.orak.tocv.CircleView.utils.Touch;
+import pl.orak.tocv.CircleUtils.CircleParams;
+import pl.orak.tocv.CircleUtils.Point;
+import pl.orak.tocv.CircleUtils.Touch;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

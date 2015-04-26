@@ -1,4 +1,4 @@
-package pl.orak.tocv.CircleView.utils;
+package pl.orak.tocv.CircleUtils;
 
 /**
  * Created by Tomek on 2015-04-23.
