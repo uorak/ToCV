@@ -109,4 +109,11 @@ public class CircleMenuPresenterTest {
         verify(circleMenuView, times(1)).addMenuItem(item1,pos);
 
     }
+
+    @Test
+    public void testMoveItemShouldUpdeteItems() throws Exception {
+        presenter.onEvent(new MenuTouchEvent());
+        verify(circleMenuView, times(1)).updateMenuItemsPositions();
+
+    }
 }

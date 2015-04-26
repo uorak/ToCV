@@ -2,8 +2,10 @@ package pl.orak.tocv.CircleMenu;
 
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.Point;
+import pl.orak.tocv.MenuTouchEvent;
 import pl.orak.tocv.Utils;
 
 /**
@@ -16,6 +18,7 @@ public class CircleMenuPresenter {
 
     public CircleMenuPresenter(CircleMenuView circleMenuView) {
         this.circleMenuView = circleMenuView;
+        EventBus.getDefault().register(this);
     }
 
     public void setMenuItems(List<MyMenuItem> menuItems) {
@@ -32,5 +35,9 @@ public class CircleMenuPresenter {
         x = Utils.round(x, 2);
         y = Utils.round(y, 2);
         return new Point(x, y);
+    }
+
+    public void onEvent(MenuTouchEvent event) {
+        circleMenuView.updateMenuItemsPositions();
     }
 }

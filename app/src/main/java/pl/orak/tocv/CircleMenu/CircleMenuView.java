@@ -11,4 +11,6 @@ public interface CircleMenuView {
     CircleParams getCircleParams();
 
     void addMenuItem(MyMenuItem menuItem, Point position);
+
+    void updateMenuItemsPositions();
 }
