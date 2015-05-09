@@ -1,12 +1,10 @@
-package pl.orak.tocv;
+package pl.orak.tocv.CircleView;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import pl.orak.tocv.CircleView.CircleView;
-import pl.orak.tocv.CircleView.CircleViewPresenter;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.Point;
 import pl.orak.tocv.CircleUtils.Touch;
@@ -15,7 +13,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CircleViewPreenterTest {
+public class CircleViewPresenterTest {
 
     private CircleViewPresenter circleViewPresenter;
 

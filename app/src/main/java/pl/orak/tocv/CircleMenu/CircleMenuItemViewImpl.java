@@ -6,8 +6,7 @@ import android.util.AttributeSet;
 import pl.orak.tocv.CircleView.CircleViewImpl;
 
 /**
- * Created by Tomek on 2015-04-26.
- */
+ * Created by Tomek on 2015-04-26. */
 public class CircleMenuItemViewImpl extends CircleViewImpl {
 
 

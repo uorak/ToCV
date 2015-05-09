@@ -2,7 +2,6 @@ package pl.orak.tocv.CircleView;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -15,6 +14,7 @@ import pl.orak.tocv.CircleUtils.Touch;
  */
 public class CircleViewImpl extends RoundedImageView implements CircleView {
     public static final int PRESS_ANIMATION_DURATION = 50;
+    public static final float SCALE_ANIMATION_FACTOR = 0.8f;
     private CircleViewPresenter presenter;
     private CircleParams circleParams;
 
@@ -49,14 +49,12 @@ public class CircleViewImpl extends RoundedImageView implements CircleView {
 
     @Override
     public void onPressedDown() {
-        Log.d("mytest","down");
-        animate().scaleX(0.8f).setDuration(PRESS_ANIMATION_DURATION).start();
+        animate().scaleX(SCALE_ANIMATION_FACTOR).setDuration(PRESS_ANIMATION_DURATION).start();
         animate().scaleY(0.8f).setDuration(PRESS_ANIMATION_DURATION).start();
     }
 
     @Override
     public void onPressedUp() {
-        Log.d("mytest","up");
         animate().scaleX(1f).setDuration(PRESS_ANIMATION_DURATION).start();
         animate().scaleY(1f).setDuration(PRESS_ANIMATION_DURATION).start();
     }
