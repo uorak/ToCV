@@ -1,5 +1,7 @@
 package pl.orak.tocv;
 
+import android.content.Context;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,8 +15,12 @@ import pl.orak.tocv.CircleMenu.CircleMenuView;
 import pl.orak.tocv.CircleMenu.MyMenuItem;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.Point;
+import pl.orak.tocv.CircleUtils.Touch;
 
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -29,6 +35,7 @@ public class CircleMenuPresenterTest {
 
     @Before
     public void setUp() throws Exception {
+        ToCvApp.initComponent(mock(Context.class), true);
         MockitoAnnotations.initMocks(this);
         when(circleMenuView.getCircleParams()).thenReturn(new CircleParams(new Point(0, 0), 1f));
         presenter = new CircleMenuPresenter(circleMenuView);
@@ -88,11 +95,11 @@ public class CircleMenuPresenterTest {
         Point result = presenter.getItemPosition(0);
         assertTrue(result.equals(new Point(0,1)));
         result = presenter.getItemPosition(1);
-        assertTrue(result.equals(new Point(1,0)));
+        assertTrue(result.equals(new Point(1, 0)));
         result = presenter.getItemPosition(2);
-        assertTrue(result.equals(new Point(0,-1)));
+        assertTrue(result.equals(new Point(0, -1)));
         result = presenter.getItemPosition(3);
-        assertTrue(result.equals(new Point(-1,0)));
+        assertTrue(result.equals(new Point(-1, 0)));
     }
 
     @Test
@@ -106,14 +113,55 @@ public class CircleMenuPresenterTest {
         menuItems.add(item3);
         presenter.setMenuItems(menuItems);
         Point pos = presenter.getItemPosition(0);
-        verify(circleMenuView, times(1)).addMenuItem(item1,pos);
+        verify(circleMenuView, times(1)).addMenuItem(item1, pos);
 
     }
 
     @Test
     public void testMoveItemShouldUpdeteItems() throws Exception {
-        presenter.onEvent(new MenuTouchEvent());
-        verify(circleMenuView, times(1)).updateMenuItemsPositions();
+        presenter.onEvent(new MenuItemMoveEvent(1));
+        verify(circleMenuView, times(1)).updateMenuItems(1);
+
+    }
+
+    @Test
+    public void testOnTouchDownNotUpdate() throws Exception {
+        presenter.onTouch(new Touch(new Point(0,0), Touch.TouchMode.DOWN), 0);
+        presenter.onTouch(new Touch(new Point(1,0), Touch.TouchMode.DOWN), 0);
+        presenter.onTouch(new Touch(new Point(0,1), Touch.TouchMode.DOWN), 0);
+        verify(circleMenuView, times(0)).updateMenuItems(anyInt());
+    }
+
+    @Test
+    public void testOnTouchNotMoveNotUpdate() throws Exception {
+        presenter.onTouch(new Touch(new Point(1,0), Touch.TouchMode.DOWN), 0);
+        presenter.onTouch(new Touch(new Point(1,0), Touch.TouchMode.MOVE), 0);
+        verify(circleMenuView, times(0)).updateMenuItems(anyInt());
+    }
+
+
+    @Test
+    public void testCalculateAngle() throws Exception {
+        Point middle = new Point(0,0);
+        Point oldPoint = new Point(0,1);
+        Point newPoint = new Point(1,0);
+        assertThat(presenter.calculateAngle(middle, oldPoint, newPoint), is(-90f));
+
+        oldPoint = new Point(0,1);
+        newPoint = new Point(-1,0);
+        assertThat(presenter.calculateAngle(middle, oldPoint, newPoint), is(90f));
+    }
+
+    @Test
+    public void testRotatePoint() throws Exception {
+        Point middle = new Point(0,0);
+        Point oldPoint = new Point(0,1);
+        Point result =presenter.rotatePoint(middle, oldPoint, 90);
+        assertTrue(result.equals(new Point(-1,0)));
+
+        oldPoint = new Point(0,1);
+        result =presenter.rotatePoint(middle, oldPoint, -90);
+        assertTrue(result.equals(new Point(1,0)));
 
     }
 }

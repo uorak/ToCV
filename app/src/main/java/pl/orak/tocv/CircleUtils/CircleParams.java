@@ -39,4 +39,14 @@ public class CircleParams {
         return l <= r;
     }
 
+    public boolean pointIn(Point point, int offset) {
+        if (point == null) {
+            return false;
+        }
+        float l = (float) (Math.pow((point.x - middle.x), 2) + Math.pow((point.y - middle.y), 2));
+        float r = (float) Math.pow(radius+offset, 2);
+        float r2 = (float) Math.pow(radius-offset, 2);
+        return (l <= r && l>=r2);
+    }
+
 }

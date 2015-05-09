@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import pl.orak.tocv.CircleUtils.CircleParams;
-import pl.orak.tocv.CircleUtils.Point;
 import pl.orak.tocv.CircleUtils.Touch;
 
 /**
@@ -41,12 +40,9 @@ public class CircleViewImpl extends RoundedImageView implements CircleView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(event.getAction()==MotionEvent.ACTION_DOWN){
-            presenter.onTouch(new Touch(new Point(event.getX(), event.getY()), Touch.TouchMode.DOWN));
-        }else if(event.getAction()==MotionEvent.ACTION_UP || event.getAction()==MotionEvent.ACTION_CANCEL ){
-            presenter.onTouch(new Touch( Touch.TouchMode.UP));
-        }else if(event.getAction()==MotionEvent.ACTION_MOVE){
-            presenter.onTouch(new Touch(new Point(event.getX(), event.getY()), Touch.TouchMode.MOVE));
+        Touch touch = Touch.fromMotionEvent(event);
+        if(touch!=null){
+            presenter.onTouch(touch);
         }
         return true;
     }
