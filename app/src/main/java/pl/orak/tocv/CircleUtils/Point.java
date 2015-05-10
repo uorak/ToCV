@@ -14,6 +14,11 @@ public class Point {
         this.y=y;
     }
 
+    public Point(Point point) {
+        this.x = point.x;
+        this.y = point.y;
+    }
+
     @Override
     public boolean equals(Object o) {
         Point p = (Point)o;
@@ -21,5 +26,13 @@ public class Point {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

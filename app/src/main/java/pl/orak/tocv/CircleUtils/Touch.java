@@ -20,6 +20,17 @@ public class Touch {
         this.touchMode=touchMode;
     }
 
+    public static Touch fromMotionEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            return (new Touch(new Point(event.getX(), event.getY()), Touch.TouchMode.DOWN));
+        } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+            return (new Touch(new Point(event.getX(), event.getY()), Touch.TouchMode.UP));
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            return (new Touch(new Point(event.getX(), event.getY()), Touch.TouchMode.MOVE));
+        }
+        return null;
+    }
+
     public Point getPoint() {
         return point;
     }
@@ -28,16 +39,13 @@ public class Touch {
         return touchMode;
     }
 
-    public enum TouchMode {DOWN, MOVE, UP}
-
-    public static Touch fromMotionEvent(MotionEvent event){
-        if(event.getAction()==MotionEvent.ACTION_DOWN){
-            return (new Touch(new Point(event.getX(), event.getY()), Touch.TouchMode.DOWN));
-        }else if(event.getAction()==MotionEvent.ACTION_UP || event.getAction()==MotionEvent.ACTION_CANCEL ){
-            return (new Touch( Touch.TouchMode.UP));
-        }else if(event.getAction()==MotionEvent.ACTION_MOVE){
-            return (new Touch(new Point(event.getX(), event.getY()), Touch.TouchMode.MOVE));
-        }
-        return null;
+    @Override
+    public String toString() {
+        return "Touch{" +
+                "point=" + point +
+                ", touchMode=" + touchMode +
+                '}';
     }
+
+    public enum TouchMode {DOWN, MOVE, UP}
 }

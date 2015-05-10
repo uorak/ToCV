@@ -18,26 +18,37 @@ public class CircleUtils {
 
         double diff = a - b;
 
-        return (float) Math.toDegrees(diff);
+        float angle = -(float) Math.toDegrees(diff);
+        if (angle < -180) {
+            angle = angle + 360;
+        }
+        if (angle > 180) {
+            angle = angle - 360;
+        }
+
+        return angle;
     }
 
-    public static  Point rotatePoint(Point middle, Point point, float angle) {
+    public static Point rotatePoint(Point middle, Point point, float angle) {
+
+//        angle = -angle;
+        Point newPoint = new Point(point);
 
         double s = Math.sin(Math.toRadians(angle));
         double c = Math.cos(Math.toRadians(angle));
 
         // translate point back to origin:
-        point.x -= middle.x;
-        point.y -= middle.y;
+        newPoint.x -= middle.x;
+        newPoint.y -= middle.y;
 
         // rotate point
-        double xnew = point.x * c - point.y * s;
-        double ynew = point.x * s + point.y * c;
+        double xnew = newPoint.x * c + newPoint.y * s;
+        double ynew = -newPoint.x * s + newPoint.y * c;
 
         // translate point back:
-        point.x = Utils.round((float) (xnew + middle.x), 3);
-        point.y = Utils.round((float) (ynew + middle.y), 3);
-        return point;
+        newPoint.x = Utils.round((float) (xnew + middle.x), 3);
+        newPoint.y = Utils.round((float) (ynew + middle.y), 3);
+        return newPoint;
     }
 
 }

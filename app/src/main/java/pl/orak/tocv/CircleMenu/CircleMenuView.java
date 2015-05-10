@@ -12,5 +12,5 @@ public interface CircleMenuView {
 
     void addMenuItem(MyMenuItem menuItem, Point position);
 
-    void updateMenuItems(float vector);
+    void updateMenuItems(float angle, boolean animate);
 }

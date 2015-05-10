@@ -17,6 +17,7 @@ import pl.orak.tocv.ToCvApp;
 
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -118,16 +119,15 @@ public class CircleMenuPresenterTest {
         presenter.onTouch(new Touch(new Point(0, 0), Touch.TouchMode.DOWN), 0);
         presenter.onTouch(new Touch(new Point(1,0), Touch.TouchMode.DOWN), 0);
         presenter.onTouch(new Touch(new Point(0,1), Touch.TouchMode.DOWN), 0);
-        verify(circleMenuView, times(0)).updateMenuItems(anyInt());
+        verify(circleMenuView, times(0)).updateMenuItems(anyInt(), eq(false));
     }
 
     @Test
     public void testOnTouchNotMoveNotUpdate() throws Exception {
         presenter.onTouch(new Touch(new Point(1,0), Touch.TouchMode.DOWN), 0);
         presenter.onTouch(new Touch(new Point(1,0), Touch.TouchMode.MOVE), 0);
-        verify(circleMenuView, times(0)).updateMenuItems(anyInt());
+        verify(circleMenuView, times(0)).updateMenuItems(anyInt(), eq(false));
     }
-
 
 
 }
