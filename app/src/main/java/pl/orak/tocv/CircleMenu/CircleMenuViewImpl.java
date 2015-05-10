@@ -51,7 +51,6 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
     public void init() {
         presenter = new CircleMenuPresenter(this);
         presenter.setOffset((int) getResources().getDimension(R.dimen.menu_item_size));
-        animatorViewHashMap.put(this, animate().setDuration(FLING_ANIMATION_DURATION).setInterpolator(INTERPOLATOR));
     }
 
     @Override
@@ -89,22 +88,21 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
 
     @Override
     public void updateMenuItems(float angle, boolean animate) {
-        if (animate) {
-            animatorViewHashMap.put(this, animate().setDuration(FLING_ANIMATION_DURATION).setInterpolator(INTERPOLATOR).rotationBy(-angle));
-            animatorViewHashMap.get(this).start();
-        } else {
-            setRotation(-angle);
-        }
+        rotateView(this, angle, animate);
         Iterator it = circleMenuItemViewHashMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             CircleMenuItemViewImpl circleMenuItemView = (CircleMenuItemViewImpl) pair.getValue();
-            if (animate) {
-                animatorViewHashMap.put(circleMenuItemView, circleMenuItemView.animate().setDuration(FLING_ANIMATION_DURATION).setInterpolator(INTERPOLATOR).rotationBy(angle));
-                animatorViewHashMap.get(circleMenuItemView).start();
-            } else {
-                circleMenuItemView.setRotation(angle);
-            }
+            rotateView(circleMenuItemView, -angle, animate);
+        }
+    }
+
+    private void rotateView(View view, float angle, boolean animate) {
+        if (animate) {
+            animatorViewHashMap.put(view, view.animate().setDuration(FLING_ANIMATION_DURATION).setInterpolator(INTERPOLATOR).rotationBy(-angle));
+            animatorViewHashMap.get(view).start();
+        } else {
+            view.setRotation(-angle);
         }
     }
 

@@ -18,6 +18,7 @@ import pl.orak.tocv.Utils;
  */
 public class CircleMenuPresenter {
 
+    public static final int ANGLE_TRACKING_TIME = 100;
     CircleMenuView circleMenuView;
     @Inject
     EventBus eventBus;
@@ -79,9 +80,9 @@ public class CircleMenuPresenter {
     }
 
     private void checkFling() {
-        AngleInTime flingAngle = getFlingAngle();
-        if (flingAngle.angle != 0) {
-            circleMenuView.updateMenuItems(flingAngle.angle, true);
+        float angle = getFlingAngle();
+        if (angle != 0) {
+            circleMenuView.updateMenuItems(angle, true);
         }
         angleInTimeArrayList.clear();
     }
@@ -93,13 +94,12 @@ public class CircleMenuPresenter {
         angleInTimeArrayList.add(new AngleInTime(angle, System.currentTimeMillis()));
     }
 
-    private AngleInTime getFlingAngle() {
+    private float getFlingAngle() {
         float angle = 0;
-        int animationSpeed = 0;
         long timestamp = System.currentTimeMillis();
         if (angleInTimeArrayList.size() > 0) {
             for (int i = angleInTimeArrayList.size() - 1; i >= 0; i--) {
-                if (timestamp - angleInTimeArrayList.get(i).timestamp < 100) {
+                if (timestamp - angleInTimeArrayList.get(i).timestamp < ANGLE_TRACKING_TIME) {
                     angle += angleInTimeArrayList.get(i).angle;
                 } else {
                     break;
@@ -107,7 +107,7 @@ public class CircleMenuPresenter {
             }
 
         }
-        return new AngleInTime(angle, animationSpeed);
+        return angle;
     }
 
     private class AngleInTime {
