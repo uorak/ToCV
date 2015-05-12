@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import de.greenrobot.event.EventBus;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.Touch;
+import pl.orak.tocv.R;
 import pl.orak.tocv.ToCvApp;
 
 /**
@@ -43,7 +44,11 @@ public class CircleViewImpl extends RoundedImageView implements CircleView {
         ToCvApp.inject(this);
         presenter = new CircleViewPresenter(this);
         setOval(true);
+        setBackgroundResource(R.drawable.circular_shadow);
+        int padding = (int) getContext().getResources().getDimension(R.dimen.shadow_padding);
+        setPadding(padding, padding, padding, padding);
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -57,7 +62,7 @@ public class CircleViewImpl extends RoundedImageView implements CircleView {
     @Override
     public void onPressedDown() {
         animate().scaleX(SCALE_ANIMATION_FACTOR).setDuration(PRESS_ANIMATION_DURATION).start();
-        animate().scaleY(0.8f).setDuration(PRESS_ANIMATION_DURATION).start();
+        animate().scaleY(SCALE_ANIMATION_FACTOR).setDuration(PRESS_ANIMATION_DURATION).start();
     }
 
     @Override
