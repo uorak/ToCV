@@ -6,6 +6,7 @@ import dagger.Component;
 import pl.orak.tocv.CircleMenu.CircleMenuItemViewImpl;
 import pl.orak.tocv.CircleMenu.CircleMenuPresenter;
 import pl.orak.tocv.CircleMenu.CircleMenuViewImpl;
+import pl.orak.tocv.CircleView.CenterCircleViewImpl;
 import pl.orak.tocv.CircleView.CircleViewImpl;
 import pl.orak.tocv.di.utils.BaseTarget;
 
@@ -22,5 +23,6 @@ public interface AppComponent {
 
     void inject(CircleViewImpl view);
 
+    void inject(CenterCircleViewImpl view);
     void inject(CircleMenuItemViewImpl view);
 }

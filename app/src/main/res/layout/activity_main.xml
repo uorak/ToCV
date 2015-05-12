@@ -1,21 +1,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainContainer"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <pl.orak.tocv.CircleView.CircleViewImpl
+
+
+    <pl.orak.tocv.CircleMenu.CircleMenuViewImpl
+        android:layout_width="265dp"
+        android:layout_height="265dp"
+        android:layout_centerInParent="true"></pl.orak.tocv.CircleMenu.CircleMenuViewImpl>
+
+    <pl.orak.tocv.CircleView.CenterCircleViewImpl
         android:id="@+id/centerCircleView"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerInParent="true"
         android:src="@drawable/fota"
-        app:riv_border_width="2dip"
-        app:riv_border_color="#333333"/>
-
-    <pl.orak.tocv.CircleMenu.CircleMenuViewImpl
-        android:layout_width="260dp"
-        android:layout_height="260dp"
-        android:layout_centerInParent="true"></pl.orak.tocv.CircleMenu.CircleMenuViewImpl>
+        app:riv_border_color="#333333"
+        app:riv_border_width="2dip" />
 
 </RelativeLayout>
