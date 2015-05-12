@@ -6,8 +6,12 @@ import android.view.MotionEvent;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import javax.inject.Inject;
+
+import de.greenrobot.event.EventBus;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.Touch;
+import pl.orak.tocv.ToCvApp;
 
 /**
  * Created by Tomek on 2015-04-23.
@@ -15,6 +19,8 @@ import pl.orak.tocv.CircleUtils.Touch;
 public class CircleViewImpl extends RoundedImageView implements CircleView {
     public static final int PRESS_ANIMATION_DURATION = 50;
     public static final float SCALE_ANIMATION_FACTOR = 0.8f;
+    @Inject
+    protected EventBus eventBus;
     private CircleViewPresenter presenter;
     private CircleParams circleParams;
 
@@ -34,6 +40,7 @@ public class CircleViewImpl extends RoundedImageView implements CircleView {
     }
 
     private void init(){
+        ToCvApp.inject(this);
         presenter = new CircleViewPresenter(this);
         setOval(true);
     }

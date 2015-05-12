@@ -31,7 +31,7 @@ public class CircleMenuPresenter {
 
     public CircleMenuPresenter(CircleMenuView circleMenuView) {
         ToCvApp.inject(this);
-//        eventBus.register(this);
+        eventBus.register(this);
         this.circleMenuView = circleMenuView;
     }
 
@@ -107,7 +107,25 @@ public class CircleMenuPresenter {
             }
 
         }
-        return angle;
+        return -angle;
+    }
+
+    public void onEvent(MenuItemClickedEvent event) {
+
+        float alpha = 360 / menuItems.size();
+        float rotation = circleMenuView.getRotation() % 360;
+        float actualAngle = ((menuItems.indexOf(event.menuItem) * alpha) + rotation) % 360;
+        if (actualAngle < 0) {
+            actualAngle = 360 + actualAngle;
+        }
+        float angle = 0;
+        if (actualAngle <= 180) {
+            angle = 180 - actualAngle;
+        } else {
+            angle = -(actualAngle - 180);
+        }
+
+        circleMenuView.updateMenuItems(angle, true);
     }
 
     private class AngleInTime {

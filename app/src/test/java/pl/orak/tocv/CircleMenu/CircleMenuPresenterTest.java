@@ -35,6 +35,7 @@ public class CircleMenuPresenterTest {
         ToCvApp.initComponent(mock(Context.class), true);
         MockitoAnnotations.initMocks(this);
         when(circleMenuView.getCircleParams()).thenReturn(new CircleParams(new Point(0, 0), 1f));
+        when(circleMenuView.getRotation()).thenReturn(0f);
         presenter = new CircleMenuPresenter(circleMenuView);
     }
 
@@ -129,5 +130,86 @@ public class CircleMenuPresenterTest {
         verify(circleMenuView, times(0)).updateMenuItems(anyInt(), eq(false));
     }
 
+    @Test
+    public void testOnItemClick() throws Exception {
+        List<MyMenuItem> menuItems = new ArrayList<>();
+        MyMenuItem item1 = mock(MyMenuItem.class);
+        menuItems.add(item1);
+        MyMenuItem item2 = mock(MyMenuItem.class);
+        menuItems.add(item2);
+        MyMenuItem item3 = mock(MyMenuItem.class);
+        menuItems.add(item3);
+        MyMenuItem item4 = mock(MyMenuItem.class);
+        menuItems.add(item4);
+        presenter.setMenuItems(menuItems);
 
+        presenter.onEvent(new MenuItemClickedEvent(item1));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(180f), eq(true));
+
+        presenter.onEvent(new MenuItemClickedEvent(item2));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(90f), eq(true));
+
+        presenter.onEvent(new MenuItemClickedEvent(item3));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(0f), eq(true));
+
+        presenter.onEvent(new MenuItemClickedEvent(item4));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-90f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(90f);
+        presenter.onEvent(new MenuItemClickedEvent(item1));
+        verify(circleMenuView, times(2)).updateMenuItems(eq(90f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(190f);
+        presenter.onEvent(new MenuItemClickedEvent(item1));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-10f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(-90f);
+        presenter.onEvent(new MenuItemClickedEvent(item1));
+        verify(circleMenuView, times(2)).updateMenuItems(eq(-90f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(-190f);
+        presenter.onEvent(new MenuItemClickedEvent(item1));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(10f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(280f);
+        presenter.onEvent(new MenuItemClickedEvent(item1));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-100f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(370f);
+        presenter.onEvent(new MenuItemClickedEvent(item1));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(170f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(-370f);
+        presenter.onEvent(new MenuItemClickedEvent(item1));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-170f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(-1f);
+        presenter.onEvent(new MenuItemClickedEvent(item1));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-179f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(-1f);
+        presenter.onEvent(new MenuItemClickedEvent(item2));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(91f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(181f);
+        presenter.onEvent(new MenuItemClickedEvent(item2));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-91f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(-181f);
+        presenter.onEvent(new MenuItemClickedEvent(item2));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-89f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(181f);
+        presenter.onEvent(new MenuItemClickedEvent(item4));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(89f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(-181f);
+        presenter.onEvent(new MenuItemClickedEvent(item4));
+        verify(circleMenuView, times(2)).updateMenuItems(eq(91f), eq(true));
+
+        when(circleMenuView.getRotation()).thenReturn(-170f);
+        presenter.onEvent(new MenuItemClickedEvent(item4));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(80f), eq(true));
+
+    }
 }

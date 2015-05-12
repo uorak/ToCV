@@ -30,6 +30,11 @@ public class CircleUtilsTest {
         oldPoint = new Point(1, 2);
         newPoint = new Point(1, 0);
         assertThat(CircleUtils.calculateAngle(middle, oldPoint, newPoint), is(180f));
+
+        middle = new Point(0, 0);
+        oldPoint = new Point(0, 1);
+        newPoint = new Point(0, -10);
+        assertThat(CircleUtils.calculateAngle(middle, oldPoint, newPoint), is(180f));
     }
 
     @Test
