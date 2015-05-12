@@ -120,14 +120,14 @@ public class CircleMenuPresenterTest {
         presenter.onTouch(new Touch(new Point(0, 0), Touch.TouchMode.DOWN), 0);
         presenter.onTouch(new Touch(new Point(1,0), Touch.TouchMode.DOWN), 0);
         presenter.onTouch(new Touch(new Point(0,1), Touch.TouchMode.DOWN), 0);
-        verify(circleMenuView, times(0)).updateMenuItems(anyInt(), eq(false));
+        verify(circleMenuView, times(0)).updateMenuItems(anyInt(), eq(CircleMenuView.UpdateMenuItemsOption.Normal));
     }
 
     @Test
     public void testOnTouchNotMoveNotUpdate() throws Exception {
         presenter.onTouch(new Touch(new Point(1,0), Touch.TouchMode.DOWN), 0);
         presenter.onTouch(new Touch(new Point(1,0), Touch.TouchMode.MOVE), 0);
-        verify(circleMenuView, times(0)).updateMenuItems(anyInt(), eq(false));
+        verify(circleMenuView, times(0)).updateMenuItems(anyInt(), eq(CircleMenuView.UpdateMenuItemsOption.Normal));
     }
 
     @Test
@@ -144,72 +144,72 @@ public class CircleMenuPresenterTest {
         presenter.setMenuItems(menuItems);
 
         presenter.onEvent(new MenuItemClickedEvent(item1));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(180f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(180f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         presenter.onEvent(new MenuItemClickedEvent(item2));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(90f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(90f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         presenter.onEvent(new MenuItemClickedEvent(item3));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(0f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(0f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         presenter.onEvent(new MenuItemClickedEvent(item4));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(-90f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-90f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(90f);
         presenter.onEvent(new MenuItemClickedEvent(item1));
-        verify(circleMenuView, times(2)).updateMenuItems(eq(90f), eq(true));
+        verify(circleMenuView, times(2)).updateMenuItems(eq(90f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(190f);
         presenter.onEvent(new MenuItemClickedEvent(item1));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(-10f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-10f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(-90f);
         presenter.onEvent(new MenuItemClickedEvent(item1));
-        verify(circleMenuView, times(2)).updateMenuItems(eq(-90f), eq(true));
+        verify(circleMenuView, times(2)).updateMenuItems(eq(-90f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(-190f);
         presenter.onEvent(new MenuItemClickedEvent(item1));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(10f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(10f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(280f);
         presenter.onEvent(new MenuItemClickedEvent(item1));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(-100f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-100f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(370f);
         presenter.onEvent(new MenuItemClickedEvent(item1));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(170f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(170f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(-370f);
         presenter.onEvent(new MenuItemClickedEvent(item1));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(-170f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-170f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(-1f);
         presenter.onEvent(new MenuItemClickedEvent(item1));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(-179f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-179f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(-1f);
         presenter.onEvent(new MenuItemClickedEvent(item2));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(91f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(91f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(181f);
         presenter.onEvent(new MenuItemClickedEvent(item2));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(-91f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-91f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(-181f);
         presenter.onEvent(new MenuItemClickedEvent(item2));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(-89f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(-89f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(181f);
         presenter.onEvent(new MenuItemClickedEvent(item4));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(89f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(89f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(-181f);
         presenter.onEvent(new MenuItemClickedEvent(item4));
-        verify(circleMenuView, times(2)).updateMenuItems(eq(91f), eq(true));
+        verify(circleMenuView, times(2)).updateMenuItems(eq(91f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
         when(circleMenuView.getRotation()).thenReturn(-170f);
         presenter.onEvent(new MenuItemClickedEvent(item4));
-        verify(circleMenuView, times(1)).updateMenuItems(eq(80f), eq(true));
+        verify(circleMenuView, times(1)).updateMenuItems(eq(80f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
 
     }
 }

@@ -60,7 +60,7 @@ public class CircleMenuPresenter {
             Point newPoint = CircleUtils.rotatePoint(circleMenuView.getCircleParams().middle, touch.getPoint(), -rotation);
             float angle = CircleUtils.calculateAngle(circleMenuView.getCircleParams().middle, lastPoint, newPoint);
             if (angle != 0) {
-                circleMenuView.updateMenuItems(initialRotation + angle, false);
+                circleMenuView.updateMenuItems(initialRotation + angle, CircleMenuView.UpdateMenuItemsOption.Normal);
                 lastPoint = newPoint;
                 initialRotation = initialRotation + angle;
                 trackAngle(angle);
@@ -82,7 +82,7 @@ public class CircleMenuPresenter {
     private void checkFling() {
         float angle = getFlingAngle();
         if (angle != 0) {
-            circleMenuView.updateMenuItems(angle, true);
+            circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Fling);
         }
         angleInTimeArrayList.clear();
     }
@@ -125,7 +125,7 @@ public class CircleMenuPresenter {
             angle = -(actualAngle - 180);
         }
 
-        circleMenuView.updateMenuItems(angle, true);
+        circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Click);
     }
 
     private class AngleInTime {

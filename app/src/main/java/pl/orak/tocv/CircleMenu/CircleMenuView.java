@@ -8,11 +8,15 @@ import pl.orak.tocv.CircleUtils.Point;
  */
 public interface CircleMenuView {
 
+    public enum UpdateMenuItemsOption {Normal, Fling, Click}
+
     CircleParams getCircleParams();
 
     void addMenuItem(MyMenuItem menuItem, Point position);
 
-    void updateMenuItems(float angle, boolean animate);
+    void updateMenuItems(float angle, UpdateMenuItemsOption option);
+
+    public enum UpdateMenuItemsOption {Normal, Fling, Click}
 
     float getRotation();
 }

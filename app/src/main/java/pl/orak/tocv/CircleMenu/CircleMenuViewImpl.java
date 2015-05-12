@@ -1,11 +1,13 @@
 package pl.orak.tocv.CircleMenu;
 
+import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -28,7 +30,9 @@ import pl.orak.tocv.ToCvApp;
 public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
 
     private static final int FLING_ANIMATION_DURATION = 800;
-    private final DecelerateInterpolator INTERPOLATOR = new DecelerateInterpolator(2);
+    private static final int CLICK_ANIMATION_DURATION = 1100;
+    private final TimeInterpolator FLING_INTERPOLATOR = new DecelerateInterpolator(2);
+    private final TimeInterpolator CLICK_INTERPOLATOR = new OvershootInterpolator(2);
     ArrayList<CircleMenuItemViewImpl> circleMenuItemViews = new ArrayList<>();
     HashMap<View, ViewPropertyAnimator> animatorViewHashMap = new HashMap<>();
     @Inject
@@ -88,20 +92,26 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
     }
 
     @Override
-    public void updateMenuItems(float angle, boolean animate) {
-        rotateView(this, angle, animate);
+    public void updateMenuItems(float angle, UpdateMenuItemsOption option) {
+        rotateView(this, angle, option);
         for (CircleMenuItemViewImpl circleMenuItemView : circleMenuItemViews) {
-            rotateView(circleMenuItemView, -angle, animate);
+            rotateView(circleMenuItemView, -angle, option);
         }
     }
 
-    private void rotateView(View view, float angle, boolean animate) {
-        if (animate) {
-            animatorViewHashMap.put(view, view.animate().setDuration(FLING_ANIMATION_DURATION).setInterpolator(INTERPOLATOR).rotationBy(angle));
-            animatorViewHashMap.get(view).start();
-        } else {
+    private void rotateView(View view, float angle, UpdateMenuItemsOption option) {
+        if (option == UpdateMenuItemsOption.Fling) {
+            rotateViewWithAnimation(view, angle, FLING_ANIMATION_DURATION, FLING_INTERPOLATOR);
+        } else if (option == UpdateMenuItemsOption.Normal) {
             view.setRotation(-angle);
+        } else {
+            rotateViewWithAnimation(view, angle, CLICK_ANIMATION_DURATION, CLICK_INTERPOLATOR);
         }
+    }
+
+    private void rotateViewWithAnimation(View view, float angle, int duration, TimeInterpolator interpolator) {
+        animatorViewHashMap.put(view, view.animate().setDuration(duration).setInterpolator(interpolator).rotationBy(angle));
+        animatorViewHashMap.get(view).start();
     }
 
 
