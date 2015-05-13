@@ -81,11 +81,10 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
     @Override
     public void addMenuItem(MyMenuItem menuItem, Point position) {
         CircleMenuItemViewImpl circleMenuItemView = new CircleMenuItemViewImpl(getContext(), menuItem);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                (int) getResources().getDimension(R.dimen.menu_item_size),
-                (int) getResources().getDimension(R.dimen.menu_item_size));
-        layoutParams.leftMargin = (int) (position.x - getResources().getDimension(R.dimen.menu_item_size) / 2);
-        layoutParams.topMargin = (int) (getHeight() - position.y - getResources().getDimension(R.dimen.menu_item_size) / 2);
+        int menuItemSize = (int) getResources().getDimension(R.dimen.menu_item_size);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(menuItemSize, menuItemSize);
+        layoutParams.leftMargin = (int) (position.x - menuItemSize / 2);
+        layoutParams.topMargin = (int) (getHeight() - position.y - menuItemSize / 2);
         circleMenuItemView.setLayoutParams(layoutParams);
         addView(circleMenuItemView);
         circleMenuItemViews.add(circleMenuItemView);

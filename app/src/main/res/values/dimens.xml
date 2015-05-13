@@ -3,6 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="menu_item_size">50dp</dimen>
+    <dimen name="menu_item_size">65dp</dimen>
     <dimen name="shadow_padding">6dp</dimen>
 </resources>
