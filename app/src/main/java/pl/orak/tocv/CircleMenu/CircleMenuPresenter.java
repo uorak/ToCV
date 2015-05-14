@@ -48,8 +48,8 @@ public class CircleMenuPresenter {
 
     public Point getItemPosition(int menuItemAt) {
         CircleParams circleParams = circleMenuView.getCircleParams();
-        float x = (float) (circleParams.middle.x + circleParams.radius * Math.sin((menuItemAt) * 2 * Math.PI / menuItems.size()));
-        float y = (float) (circleParams.middle.y + circleParams.radius * Math.cos((menuItemAt) * 2 * Math.PI / menuItems.size()));
+        float x = (float) (circleParams.middle.x + circleParams.radius * Math.sin((menuItemAt) * 2 * Math.PI / menuItems.size() + Math.PI));
+        float y = (float) (circleParams.middle.y + circleParams.radius * Math.cos((menuItemAt) * 2 * Math.PI / menuItems.size() + Math.PI));
         x = Utils.round(x, 2);
         y = Utils.round(y, 2);
         return new Point(x, y);
@@ -111,10 +111,19 @@ public class CircleMenuPresenter {
     }
 
     public void onEvent(MenuItemClickedEvent event) {
+        float angle;
+        if (event.screenOrientation == Utils.ScreenOrientation.Landscape) {
+            angle = getAfterClickAngle(event.menuItem, 90);
+        } else {
+            angle = getAfterClickAngle(event.menuItem, 180);
+        }
+        circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Click);
+    }
 
+    private float getAfterClickAngle(MyMenuItem menuItem, float stopAngle) {
         float alpha = 360 / menuItems.size();
         float rotation = circleMenuView.getRotation() % 360;
-        float actualAngle = ((menuItems.indexOf(event.menuItem) * alpha) + rotation) % 360;
+        float actualAngle = ((menuItems.indexOf(menuItem) * alpha - stopAngle) + rotation) % 360;
         if (actualAngle < 0) {
             actualAngle = 360 + actualAngle;
         }
@@ -124,8 +133,7 @@ public class CircleMenuPresenter {
         } else {
             angle = -(actualAngle - 180);
         }
-
-        circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Click);
+        return angle;
     }
 
     private class AngleInTime {

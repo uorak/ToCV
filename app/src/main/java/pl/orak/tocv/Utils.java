@@ -22,4 +22,6 @@ public class Utils {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }
 
+    public enum ScreenOrientation {Portrait, Landscape}
+
 }
