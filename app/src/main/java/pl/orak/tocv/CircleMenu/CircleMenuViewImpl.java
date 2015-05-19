@@ -23,6 +23,7 @@ import pl.orak.tocv.CircleUtils.Point;
 import pl.orak.tocv.CircleUtils.Touch;
 import pl.orak.tocv.R;
 import pl.orak.tocv.ToCvApp;
+import pl.orak.tocv.Utils;
 
 /**
  * Created by Tomek on 2015-04-26.
@@ -30,15 +31,18 @@ import pl.orak.tocv.ToCvApp;
 public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
 
     private static final int FLING_ANIMATION_DURATION = 800;
-    private static final int CLICK_ANIMATION_DURATION = 1100;
+    private static final int CLICK_ANIMATION_DURATION = 1400;
+    //    private static final int AFTER_MOVE_ANIMATION_DURATION = 200;
     private final TimeInterpolator FLING_INTERPOLATOR = new DecelerateInterpolator(2);
-    private final TimeInterpolator CLICK_INTERPOLATOR = new OvershootInterpolator(2);
+    private final TimeInterpolator CLICK_INTERPOLATOR = new OvershootInterpolator(1);
+    //    private final TimeInterpolator AFTER_MOVE_INTERPOLATOR = new OvershootInterpolator();
     ArrayList<CircleMenuItemViewImpl> circleMenuItemViews = new ArrayList<>();
     HashMap<View, ViewPropertyAnimator> animatorViewHashMap = new HashMap<>();
     @Inject
     List<MyMenuItem> menuItems;
     private CircleMenuPresenter presenter;
     private CircleParams circleParams;
+//    private AsyncTask<Void, Void, Void> correctTask;
 
 
     public CircleMenuViewImpl(Context context) {
@@ -98,15 +102,47 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
         }
     }
 
+    @Override
+    public Utils.ScreenOrientation getScreenOrientation() {
+        return null;
+    }
+
     private void rotateView(View view, float angle, UpdateMenuItemsOption option) {
         if (option == UpdateMenuItemsOption.Fling) {
             rotateViewWithAnimation(view, angle, FLING_ANIMATION_DURATION, FLING_INTERPOLATOR);
+//            correctPosition(FLING_ANIMATION_DURATION);
         } else if (option == UpdateMenuItemsOption.Normal) {
             view.setRotation(-angle);
-        } else {
+        } else if (option == UpdateMenuItemsOption.Click) {
             rotateViewWithAnimation(view, angle, CLICK_ANIMATION_DURATION, CLICK_INTERPOLATOR);
         }
+// else  if (option == UpdateMenuItemsOption.AfterMove){
+//            rotateViewWithAnimation(view, angle, AFTER_MOVE_ANIMATION_DURATION, AFTER_MOVE_INTERPOLATOR);
+//        }
     }
+
+//    private void correctPosition(final int delay) {
+//        if(correctTask!=null) {
+//            correctTask.cancel(true);
+//        }
+//        correctTask = new AsyncTask<Void, Void, Void>() {
+//
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//                try {
+//                    Thread.sleep(delay);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                presenter.afterMoveStop();
+//            }
+//        }.execute();
+//    }
 
     private void rotateViewWithAnimation(View view, float angle, int duration, TimeInterpolator interpolator) {
         animatorViewHashMap.put(view, view.animate().setDuration(duration).setInterpolator(interpolator).rotationBy(angle));
@@ -116,12 +152,15 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+//        if(correctTask!=null) {
+//            correctTask.cancel(true);
+//        }
         Touch touch = Touch.fromMotionEvent(event);
         if (touch != null) {
             if (touch.getTouchMode() == Touch.TouchMode.DOWN) {
                 stopAnimations();
             }
-            presenter.onTouch(touch, getRotation());
+            presenter.onTouch(touch);
         }
         return super.dispatchTouchEvent(event);
     }

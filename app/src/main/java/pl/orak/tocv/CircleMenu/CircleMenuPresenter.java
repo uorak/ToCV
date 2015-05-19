@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
+import hugo.weaving.DebugLog;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.CircleUtils;
 import pl.orak.tocv.CircleUtils.Point;
@@ -22,12 +23,13 @@ public class CircleMenuPresenter {
     CircleMenuView circleMenuView;
     @Inject
     EventBus eventBus;
-    private List<MyMenuItem> menuItems;
+    private List<MyMenuItem> menuItems = new ArrayList<>();
     private Point lastPoint;
     private float initialRotation;
     private int offset;
 
     private ArrayList<AngleInTime> angleInTimeArrayList = new ArrayList<>();
+    private boolean flingProcessed;
 
     public CircleMenuPresenter(CircleMenuView circleMenuView) {
         ToCvApp.inject(this);
@@ -55,9 +57,10 @@ public class CircleMenuPresenter {
         return new Point(x, y);
     }
 
-    public void onTouch(Touch touch, float rotation) {
+    @DebugLog
+    public void onTouch(Touch touch) {
         if (lastPoint != null && touch.getTouchMode() == Touch.TouchMode.MOVE && circleMenuView.getCircleParams().pointIn(touch.getPoint(), offset)) {
-            Point newPoint = CircleUtils.rotatePoint(circleMenuView.getCircleParams().middle, touch.getPoint(), -rotation);
+            Point newPoint = CircleUtils.rotatePoint(circleMenuView.getCircleParams().middle, touch.getPoint(), -circleMenuView.getRotation());
             float angle = CircleUtils.calculateAngle(circleMenuView.getCircleParams().middle, lastPoint, newPoint);
             if (angle != 0) {
                 circleMenuView.updateMenuItems(initialRotation + angle, CircleMenuView.UpdateMenuItemsOption.Normal);
@@ -65,23 +68,23 @@ public class CircleMenuPresenter {
                 initialRotation = initialRotation + angle;
                 trackAngle(angle);
             }
-        } else {
+        } else if (touch.getTouchMode() == Touch.TouchMode.DOWN) {
+            flingProcessed = false;
+            initialRotation = -circleMenuView.getRotation();
+            lastPoint = CircleUtils.rotatePoint(circleMenuView.getCircleParams().middle, touch.getPoint(), -circleMenuView.getRotation());
+        } else if (lastPoint != null && (touch.getTouchMode() == Touch.TouchMode.UP || !circleMenuView.getCircleParams().pointIn(touch.getPoint(), offset))) {
             lastPoint = null;
-            checkFling();
-        }
-        if (touch.getTouchMode() == Touch.TouchMode.DOWN) {
-            initialRotation = -rotation;
-            lastPoint = CircleUtils.rotatePoint(circleMenuView.getCircleParams().middle, touch.getPoint(), -rotation);
-        } else if (touch.getTouchMode() == Touch.TouchMode.UP) {
-            lastPoint = null;
-            checkFling();
+            processFling();
         }
 
     }
 
-    private void checkFling() {
+    private void processFling() {
         float angle = getFlingAngle();
-        if (angle != 0) {
+        float angleToClosestPosition = getClosestItemAngle(angle);
+        angle += angleToClosestPosition;
+        if (Math.abs(angle) > 3) {
+            flingProcessed = true;
             circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Fling);
         }
         angleInTimeArrayList.clear();
@@ -111,18 +114,16 @@ public class CircleMenuPresenter {
     }
 
     public void onEvent(MenuItemClickedEvent event) {
-        float angle;
-        if (event.screenOrientation == Utils.ScreenOrientation.Landscape) {
-            angle = getAfterClickAngle(event.menuItem, 90);
-        } else {
-            angle = getAfterClickAngle(event.menuItem, 180);
+        if (!flingProcessed) {
+            float angle = getAngleToStopPosition(event.menuItem);
+            circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Click);
         }
-        circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Click);
     }
 
-    private float getAfterClickAngle(MyMenuItem menuItem, float stopAngle) {
+    private float getAngleToStopPosition(MyMenuItem menuItem, float offsetAngle) {
         float alpha = 360 / menuItems.size();
-        float rotation = circleMenuView.getRotation() % 360;
+        float rotation = circleMenuView.getRotation() + offsetAngle % 360;
+        float stopAngle = getStopAngle(circleMenuView.getScreenOrientation());
         float actualAngle = ((menuItems.indexOf(menuItem) * alpha - stopAngle) + rotation) % 360;
         if (actualAngle < 0) {
             actualAngle = 360 + actualAngle;
@@ -134,6 +135,33 @@ public class CircleMenuPresenter {
             angle = -(actualAngle - 180);
         }
         return angle;
+    }
+
+    private float getAngleToStopPosition(MyMenuItem menuItem) {
+        return getAngleToStopPosition(menuItem, 0);
+    }
+
+    public float getClosestItemAngle(float offsetAngle) {
+        float angle = 360;
+        for (MyMenuItem menuItem : menuItems) {
+            float angleToStopPosition = getAngleToStopPosition(menuItem, offsetAngle);
+            if (Math.abs(angleToStopPosition) < Math.abs(angle) && (offsetAngle == 0 || Math.signum(angleToStopPosition) == Math.signum(offsetAngle))) {
+                angle = angleToStopPosition;
+            }
+        }
+        return angle;
+    }
+
+    public float getClosestItemAngle() {
+        return getClosestItemAngle(0);
+    }
+
+    private float getStopAngle(Utils.ScreenOrientation screenOrientation) {
+        if (screenOrientation == Utils.ScreenOrientation.Landscape) {
+            return 90;
+        } else {
+            return 180;
+        }
     }
 
     private class AngleInTime {
