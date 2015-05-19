@@ -52,8 +52,8 @@ public class CircleMenuPresenter {
         CircleParams circleParams = circleMenuView.getCircleParams();
         float x = (float) (circleParams.middle.x + circleParams.radius * Math.sin((menuItemAt) * 2 * Math.PI / menuItems.size() + Math.PI));
         float y = (float) (circleParams.middle.y + circleParams.radius * Math.cos((menuItemAt) * 2 * Math.PI / menuItems.size() + Math.PI));
-        x = Utils.round(x, 2);
-        y = Utils.round(y, 2);
+        x = Utils.round(x, 4);
+        y = Utils.round(y, 4);
         return new Point(x, y);
     }
 
@@ -83,7 +83,7 @@ public class CircleMenuPresenter {
         float angle = getFlingAngle();
         float angleToClosestPosition = getClosestItemAngle(angle);
         angle += angleToClosestPosition;
-        if (Math.abs(angle) > 3) {
+        if (Math.abs(angle) > 4) {
             flingProcessed = true;
             circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Fling);
         }

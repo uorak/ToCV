@@ -46,8 +46,8 @@ public class CircleUtils {
         double ynew = -newPoint.x * s + newPoint.y * c;
 
         // translate point back:
-        newPoint.x = Utils.round((float) (xnew + middle.x), 3);
-        newPoint.y = Utils.round((float) (ynew + middle.y), 3);
+        newPoint.x = Utils.round((float) (xnew + middle.x), 4);
+        newPoint.y = Utils.round((float) (ynew + middle.y), 4);
         return newPoint;
     }
 
