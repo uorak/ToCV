@@ -6,7 +6,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
-import hugo.weaving.DebugLog;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.CircleUtils;
 import pl.orak.tocv.CircleUtils.Point;
@@ -57,7 +56,6 @@ public class CircleMenuPresenter {
         return new Point(x, y);
     }
 
-    @DebugLog
     public void onTouch(Touch touch) {
         if (lastPoint != null && touch.getTouchMode() == Touch.TouchMode.MOVE && circleMenuView.getCircleParams().pointIn(touch.getPoint(), offset)) {
             Point newPoint = CircleUtils.rotatePoint(circleMenuView.getCircleParams().middle, touch.getPoint(), -circleMenuView.getRotation());
@@ -81,10 +79,12 @@ public class CircleMenuPresenter {
 
     private void processFling() {
         float angle = getFlingAngle();
+        if (Math.abs(angle) > 4) {
+            flingProcessed = true;
+        }
         float angleToClosestPosition = getClosestItemAngle(angle);
         angle += angleToClosestPosition;
         if (Math.abs(angle) > 4) {
-            flingProcessed = true;
             circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Fling);
         }
         angleInTimeArrayList.clear();
@@ -121,20 +121,14 @@ public class CircleMenuPresenter {
     }
 
     private float getAngleToStopPosition(MyMenuItem menuItem, float offsetAngle) {
-        float alpha = 360 / menuItems.size();
-        float rotation = circleMenuView.getRotation() + offsetAngle % 360;
+        float alpha = 360f / menuItems.size();
+        float rotation = circleMenuView.getRotation() + offsetAngle;
         float stopAngle = getStopAngle(circleMenuView.getScreenOrientation());
         float actualAngle = ((menuItems.indexOf(menuItem) * alpha - stopAngle) + rotation) % 360;
         if (actualAngle < 0) {
             actualAngle = 360 + actualAngle;
         }
-        float angle = 0;
-        if (actualAngle <= 180) {
-            angle = 180 - actualAngle;
-        } else {
-            angle = -(actualAngle - 180);
-        }
-        return angle;
+        return 180 - actualAngle;
     }
 
     private float getAngleToStopPosition(MyMenuItem menuItem) {

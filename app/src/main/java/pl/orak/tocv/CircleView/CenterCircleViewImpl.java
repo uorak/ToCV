@@ -6,6 +6,9 @@ import android.util.AttributeSet;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
+import de.greenrobot.event.EventBus;
+import pl.orak.tocv.CenterViewClickedEvent;
+
 /**
  * Created by Tomek on 2015-05-12.
  */
@@ -27,5 +30,6 @@ public class CenterCircleViewImpl extends CircleViewImpl {
         YoYo.with(Techniques.Tada)
                 .duration(700)
                 .playOn(this);
+        EventBus.getDefault().post(new CenterViewClickedEvent());
     }
 }

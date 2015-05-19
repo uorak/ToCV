@@ -3,6 +3,7 @@ package pl.orak.tocv.CircleMenu;
 import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
@@ -18,6 +19,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import de.greenrobot.event.EventBus;
+import pl.orak.tocv.CenterViewClickedEvent;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.Point;
 import pl.orak.tocv.CircleUtils.Touch;
@@ -61,6 +64,7 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
         ToCvApp.inject(this);
         presenter = new CircleMenuPresenter(this);
         presenter.setOffset((int) getResources().getDimension(R.dimen.menu_item_size));
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -139,6 +143,10 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
             ViewPropertyAnimator viewPropertyAnimator = (ViewPropertyAnimator) pair.getValue();
             viewPropertyAnimator.cancel();
         }
+    }
+
+    public void onEvent(CenterViewClickedEvent event) {
+        Log.d("mytest", "" + getRotation());
     }
 
 
