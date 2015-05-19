@@ -7,8 +7,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -34,9 +34,9 @@ import pl.orak.tocv.Utils;
 public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
 
     private static final int FLING_ANIMATION_DURATION = 800;
-    private static final int CLICK_ANIMATION_DURATION = 1400;
+    private static final int CLICK_ANIMATION_DURATION = 800;
     private final TimeInterpolator FLING_INTERPOLATOR = new DecelerateInterpolator(2);
-    private final TimeInterpolator CLICK_INTERPOLATOR = new OvershootInterpolator(1);
+    private final TimeInterpolator CLICK_INTERPOLATOR = new AccelerateDecelerateInterpolator();
     ArrayList<CircleMenuItemViewImpl> circleMenuItemViews = new ArrayList<>();
     HashMap<View, ViewPropertyAnimator> animatorViewHashMap = new HashMap<>();
     @Inject
