@@ -6,16 +6,16 @@
     android:background="@color/blue">
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:layout_marginTop="254dp"
-        android:background="@drawable/shadow_horizontal" />
+        android:layout_width="6dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="254dp"
+        android:background="@drawable/shadow_vertical" />
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="220dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="220dp"
         android:background="@drawable/circular_shadow"
         android:padding="6dp"
         android:src="@color/blueGray"
@@ -25,15 +25,15 @@
         android:id="@+id/detailsLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="260dp"
+        android:layout_marginLeft="260dp"
         android:background="@color/blueGray" />
 
     <RelativeLayout
         android:id="@+id/circleMenuLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp">
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp">
 
         <pl.orak.tocv.CircleMenu.CircleMenuViewImpl
             android:id="@+id/circleMenuImpl"

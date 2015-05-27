@@ -2,6 +2,7 @@ package pl.orak.tocv.CircleMenu;
 
 import android.animation.TimeInterpolator;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -145,11 +146,20 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            this.selectedItemIndex = bundle.getInt("selectedItemIndex");
+            state = bundle.getParcelable("instanceState");
+        }
         super.onRestoreInstanceState(state);
     }
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        return super.onSaveInstanceState();
+        selectedItemIndex = presenter.getSelectedItemIndex();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("instanceState", super.onSaveInstanceState());
+        bundle.putInt("selectedItemIndex", this.selectedItemIndex);
+        return bundle;
     }
 }
