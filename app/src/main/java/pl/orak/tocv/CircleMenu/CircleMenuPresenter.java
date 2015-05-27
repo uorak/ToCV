@@ -83,6 +83,9 @@ public class CircleMenuPresenter {
         } else if (lastPoint != null && (touch.getTouchMode() == Touch.TouchMode.UP || !circleMenuView.getCircleParams().pointIn(touch.getPoint(), offset))) {
             lastPoint = null;
             processFling();
+        } else {
+            lastPoint = null;
+            angleInTimeArrayList.clear();
         }
 
     }
@@ -91,10 +94,10 @@ public class CircleMenuPresenter {
         float angle = getFlingAngle();
         if (Math.abs(angle) > 4) {
             flingProcessed = true;
-        }
+//        }
         float angleToClosestPosition = getClosestItemAngle(angle);
         angle += angleToClosestPosition;
-        if (Math.abs(angle) > 4) {
+//        if (Math.abs(angle) > 4) {
             circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Fling);
         }
         angleInTimeArrayList.clear();
