@@ -48,8 +48,8 @@ public class CircleMenuPresenterTest {
         List<MyMenuItem> menuItems = new ArrayList<>();
         MyMenuItem item1 = mock(MyMenuItem.class);
         menuItems.add(item1);
-        presenter.setMenuItems(menuItems);
-        Point result = presenter.getItemPosition(0);
+        presenter.setMenuItems(menuItems, 0);
+        Point result = presenter.getItemInitialPosition(0);
         assertTrue(result.equals(new Point(0, -1)));
 
     }
@@ -61,11 +61,14 @@ public class CircleMenuPresenterTest {
         menuItems.add(item1);
         MyMenuItem item2 = mock(MyMenuItem.class);
         menuItems.add(item2);
-        presenter.setMenuItems(menuItems);
-        Point result = presenter.getItemPosition(0);
+        presenter.setMenuItems(menuItems, 0);
+        Point result = presenter.getItemInitialPosition(0);
         assertTrue(result.equals(new Point(0, -1)));
-        result = presenter.getItemPosition(1);
+        result = presenter.getItemInitialPosition(1);
         assertTrue(result.equals(new Point(0, 1)));
+
+        presenter.setMenuItems(menuItems, 1);
+        verify(circleMenuView, times(1)).updateMenuItems(180f, CircleMenuView.UpdateMenuItemsOption.Normal);
     }
 
     @Test
@@ -77,8 +80,8 @@ public class CircleMenuPresenterTest {
         menuItems.add(item2);
         MyMenuItem item3 = mock(MyMenuItem.class);
         menuItems.add(item3);
-        presenter.setMenuItems(menuItems);
-        Point result = presenter.getItemPosition(0);
+        presenter.setMenuItems(menuItems, 0);
+        Point result = presenter.getItemInitialPosition(0);
         assertTrue(result.equals(new Point(0, -1)));
     }
 
@@ -93,15 +96,18 @@ public class CircleMenuPresenterTest {
         menuItems.add(item3);
         MyMenuItem item4 = mock(MyMenuItem.class);
         menuItems.add(item4);
-        presenter.setMenuItems(menuItems);
-        Point result = presenter.getItemPosition(0);
+        presenter.setMenuItems(menuItems, 0);
+        Point result = presenter.getItemInitialPosition(0);
         assertTrue(result.equals(new Point(0, -1)));
-        result = presenter.getItemPosition(1);
+        result = presenter.getItemInitialPosition(1);
         assertTrue(result.equals(new Point(-1, 0)));
-        result = presenter.getItemPosition(2);
+        result = presenter.getItemInitialPosition(2);
         assertTrue(result.equals(new Point(0, 1)));
-        result = presenter.getItemPosition(3);
+        result = presenter.getItemInitialPosition(3);
         assertTrue(result.equals(new Point(1, 0)));
+
+        presenter.setMenuItems(menuItems, 1);
+        verify(circleMenuView, times(1)).updateMenuItems(-90f, CircleMenuView.UpdateMenuItemsOption.Normal);
     }
 
     @Test
@@ -113,8 +119,8 @@ public class CircleMenuPresenterTest {
         menuItems.add(item2);
         MyMenuItem item3 = mock(MyMenuItem.class);
         menuItems.add(item3);
-        presenter.setMenuItems(menuItems);
-        Point pos = presenter.getItemPosition(0);
+        presenter.setMenuItems(menuItems, 0);
+        Point pos = presenter.getItemInitialPosition(0);
         verify(circleMenuView, times(1)).addMenuItem(item1, pos);
 
     }
@@ -145,7 +151,7 @@ public class CircleMenuPresenterTest {
         menuItems.add(item3);
         MyMenuItem item4 = mock(MyMenuItem.class);
         menuItems.add(item4);
-        presenter.setMenuItems(menuItems);
+        presenter.setMenuItems(menuItems, 0);
 
         presenter.onEvent(new MenuItemClickedEvent(item1));
         verify(circleMenuView, times(1)).updateMenuItems(eq(0f), eq(CircleMenuView.UpdateMenuItemsOption.Click));
@@ -229,7 +235,7 @@ public class CircleMenuPresenterTest {
         menuItems.add(item1);
         MyMenuItem item2 = mock(MyMenuItem.class);
         menuItems.add(item2);
-        presenter.setMenuItems(menuItems);
+        presenter.setMenuItems(menuItems, 0);
 
         when(circleMenuView.getRotation()).thenReturn(80f);
         assertThat(presenter.getClosestItemAngle(), is(-80f));

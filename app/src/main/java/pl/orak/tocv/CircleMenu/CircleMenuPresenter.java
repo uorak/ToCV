@@ -29,6 +29,7 @@ public class CircleMenuPresenter {
 
     private ArrayList<AngleInTime> angleInTimeArrayList = new ArrayList<>();
     private boolean flingProcessed;
+    private int selectedItemIndex;
 
     public CircleMenuPresenter(CircleMenuView circleMenuView) {
         ToCvApp.inject(this);
@@ -36,10 +37,19 @@ public class CircleMenuPresenter {
         this.circleMenuView = circleMenuView;
     }
 
-    public void setMenuItems(List<MyMenuItem> menuItems) {
+    public int getSelectedItemIndex() {
+        return selectedItemIndex;
+    }
+
+    public void setMenuItems(List<MyMenuItem> menuItems, int selectedItemIndex) {
+        this.selectedItemIndex = selectedItemIndex;
         this.menuItems = menuItems;
         for (int i = 0; i < menuItems.size(); i++) {
-            circleMenuView.addMenuItem(menuItems.get(i), getItemPosition(i));
+            circleMenuView.addMenuItem(menuItems.get(i), getItemInitialPosition(i));
+        }
+        float angle = getAngleToStopPosition(menuItems.get(selectedItemIndex));
+        if (angle != 0) {
+            circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Normal);
         }
     }
 
@@ -47,7 +57,7 @@ public class CircleMenuPresenter {
         this.offset = offset;
     }
 
-    public Point getItemPosition(int menuItemAt) {
+    public Point getItemInitialPosition(int menuItemAt) {
         CircleParams circleParams = circleMenuView.getCircleParams();
         float x = (float) (circleParams.middle.x + circleParams.radius * Math.sin((menuItemAt) * 2 * Math.PI / menuItems.size() + Math.PI));
         float y = (float) (circleParams.middle.y + circleParams.radius * Math.cos((menuItemAt) * 2 * Math.PI / menuItems.size() + Math.PI));
@@ -117,6 +127,7 @@ public class CircleMenuPresenter {
         if (!flingProcessed) {
             float angle = getAngleToStopPosition(event.menuItem);
             circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Click);
+            selectedItemIndex = menuItems.indexOf(event.menuItem);
         }
     }
 
@@ -141,6 +152,7 @@ public class CircleMenuPresenter {
             float angleToStopPosition = getAngleToStopPosition(menuItem, offsetAngle);
             if (Math.abs(angleToStopPosition) < Math.abs(angle) && (offsetAngle == 0 || Math.signum(angleToStopPosition) == Math.signum(offsetAngle))) {
                 angle = angleToStopPosition;
+                selectedItemIndex = menuItems.indexOf(menuItem);
             }
         }
         return angle;

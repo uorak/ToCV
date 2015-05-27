@@ -2,8 +2,8 @@ package pl.orak.tocv.CircleMenu;
 
 import android.animation.TimeInterpolator;
 import android.content.Context;
+import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
@@ -19,8 +19,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-import pl.orak.tocv.CenterViewClickedEvent;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.Point;
 import pl.orak.tocv.CircleUtils.Touch;
@@ -43,6 +41,7 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
     List<MyMenuItem> menuItems;
     private CircleMenuPresenter presenter;
     private CircleParams circleParams;
+    private int selectedItemIndex;
 
 
     public CircleMenuViewImpl(Context context) {
@@ -64,13 +63,12 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
         ToCvApp.inject(this);
         presenter = new CircleMenuPresenter(this);
         presenter.setOffset((int) getResources().getDimension(R.dimen.menu_item_size));
-        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (circleMenuItemViews.isEmpty()) {
-            presenter.setMenuItems(menuItems);
+            presenter.setMenuItems(menuItems, selectedItemIndex);
         }
         super.onLayout(changed, left, top, right, bottom);
     }
@@ -145,9 +143,13 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
         }
     }
 
-    public void onEvent(CenterViewClickedEvent event) {
-        Log.d("mytest", "" + getRotation());
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        super.onRestoreInstanceState(state);
     }
 
-
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        return super.onSaveInstanceState();
+    }
 }
