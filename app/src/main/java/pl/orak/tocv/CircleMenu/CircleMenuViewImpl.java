@@ -2,6 +2,7 @@ package pl.orak.tocv.CircleMenu;
 
 import android.animation.TimeInterpolator;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.Point;
 import pl.orak.tocv.CircleUtils.Touch;
@@ -94,6 +96,7 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
         circleMenuItemViews.add(circleMenuItemView);
     }
 
+    @DebugLog
     @Override
     public void updateMenuItems(float angle, UpdateMenuItemsOption option) {
         rotateView(this, angle, option);
@@ -104,7 +107,12 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
 
     @Override
     public Utils.ScreenOrientation getScreenOrientation() {
-        return null;
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            return Utils.ScreenOrientation.Portrait;
+        } else {
+            return Utils.ScreenOrientation.Landscape;
+        }
     }
 
     private void rotateView(View view, float angle, UpdateMenuItemsOption option) {

@@ -20,6 +20,9 @@ public class CircleMenuItemViewImpl extends CircleViewImpl {
         super(context);
         this.menuItem = myMenuItem;
         setImageResource(R.color.gray);
+        if (menuItem.position == 0) {
+            setImageResource(R.color.blueGray);
+        }
     }
 
     @Override

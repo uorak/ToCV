@@ -20,7 +20,7 @@ public class MenuModule {
     List<MyMenuItem> provideMenuItems() {
         List<MyMenuItem> menuItems = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            MyMenuItem item = new MyMenuItem();
+            MyMenuItem item = new MyMenuItem(i);
             menuItems.add(item);
         }
         return menuItems;
