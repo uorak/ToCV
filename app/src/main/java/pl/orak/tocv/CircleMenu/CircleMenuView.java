@@ -19,5 +19,5 @@ public interface CircleMenuView {
 
     Utils.ScreenOrientation getScreenOrientation();
 
-    public enum UpdateMenuItemsOption {Normal, Fling, AfterMove, Click}
+    public enum UpdateMenuItemsOption {Normal, Fling, Initial, Click}
 }

@@ -19,6 +19,7 @@ import pl.orak.tocv.Utils;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyFloat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -68,7 +69,11 @@ public class CircleMenuPresenterTest {
         assertTrue(result.equals(new Point(0, 1)));
 
         presenter.setMenuItems(menuItems, 1);
-        verify(circleMenuView, times(1)).updateMenuItems(180f, CircleMenuView.UpdateMenuItemsOption.Normal);
+        verify(circleMenuView, times(1)).updateMenuItems(180f, CircleMenuView.UpdateMenuItemsOption.Initial);
+
+        when(circleMenuView.getScreenOrientation()).thenReturn(Utils.ScreenOrientation.Landscape);
+        presenter.setMenuItems(menuItems, 1);
+        verify(circleMenuView, times(1)).updateMenuItems(90f, CircleMenuView.UpdateMenuItemsOption.Initial);
     }
 
     @Test
@@ -107,7 +112,17 @@ public class CircleMenuPresenterTest {
         assertTrue(result.equals(new Point(1, 0)));
 
         presenter.setMenuItems(menuItems, 1);
-        verify(circleMenuView, times(1)).updateMenuItems(-90f, CircleMenuView.UpdateMenuItemsOption.Normal);
+        verify(circleMenuView, times(1)).updateMenuItems(-90f, CircleMenuView.UpdateMenuItemsOption.Initial);
+
+        presenter.setMenuItems(menuItems, 3);
+        verify(circleMenuView, times(1)).updateMenuItems(90f, CircleMenuView.UpdateMenuItemsOption.Initial);
+
+        when(circleMenuView.getScreenOrientation()).thenReturn(Utils.ScreenOrientation.Landscape);
+        presenter.setMenuItems(menuItems, 1);
+        verify(circleMenuView, times(1)).updateMenuItems(180f, CircleMenuView.UpdateMenuItemsOption.Initial);
+
+        presenter.setMenuItems(menuItems, 3);
+        verify(circleMenuView, times(3)).updateMenuItems(anyFloat(), eq(CircleMenuView.UpdateMenuItemsOption.Initial));
     }
 
     @Test

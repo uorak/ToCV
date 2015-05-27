@@ -122,6 +122,8 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
             view.setRotation(-angle);
         } else if (option == UpdateMenuItemsOption.Click) {
             rotateViewWithAnimation(view, angle, CLICK_ANIMATION_DURATION, CLICK_INTERPOLATOR);
+        } else if (option == UpdateMenuItemsOption.Initial) {
+            view.setRotation(angle);
         }
     }
 
@@ -165,9 +167,12 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
     @Override
     protected Parcelable onSaveInstanceState() {
         selectedItemIndex = presenter.getSelectedItemIndex();
+        presenter.destroy();
+        presenter = null;
         Bundle bundle = new Bundle();
         bundle.putParcelable("instanceState", super.onSaveInstanceState());
         bundle.putInt("selectedItemIndex", this.selectedItemIndex);
         return bundle;
     }
+
 }

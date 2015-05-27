@@ -49,7 +49,7 @@ public class CircleMenuPresenter {
         }
         float angle = getAngleToStopPosition(menuItems.get(selectedItemIndex));
         if (angle != 0) {
-            circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Normal);
+            circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Initial);
         }
     }
 
@@ -94,10 +94,8 @@ public class CircleMenuPresenter {
         float angle = getFlingAngle();
         if (Math.abs(angle) > 4) {
             flingProcessed = true;
-//        }
-        float angleToClosestPosition = getClosestItemAngle(angle);
-        angle += angleToClosestPosition;
-//        if (Math.abs(angle) > 4) {
+            float angleToClosestPosition = getClosestItemAngle(angle);
+            angle += angleToClosestPosition;
             circleMenuView.updateMenuItems(angle, CircleMenuView.UpdateMenuItemsOption.Fling);
         }
         angleInTimeArrayList.clear();
@@ -171,6 +169,10 @@ public class CircleMenuPresenter {
         } else {
             return 180;
         }
+    }
+
+    public void destroy() {
+        eventBus.unregister(this);
     }
 
     private class AngleInTime {
