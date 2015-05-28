@@ -83,19 +83,18 @@ public class CircleMenuPresenter {
             flingProcessed = false;
             initialRotation = -circleMenuView.getRotation();
             lastPoint = CircleUtils.rotatePoint(circleMenuView.getCircleParams().middle, touch.getPoint(), -circleMenuView.getRotation());
-        } else if (lastPoint != null && (touch.getTouchMode() == Touch.TouchMode.UP || !circleMenuView.getCircleParams().pointIn(touch.getPoint(), offset))) {
+        } else if (lastPoint != null && (touch.getTouchMode() == Touch.TouchMode.UP)) {
             lastPoint = null;
-            processFling();
-        } else {
+            processFling(false);
+        } else if (lastPoint != null && (!circleMenuView.getCircleParams().pointIn(touch.getPoint(), offset))) {
             lastPoint = null;
-            angleInTimeArrayList.clear();
+            processFling(true);
         }
-
     }
 
-    private void processFling() {
+    private void processFling(boolean outOfCircle) {
         float angle = getFlingAngle();
-        if (Math.abs(angle) > 4) {
+        if (Math.abs(angle) > 4 || outOfCircle) {
             flingProcessed = true;
             float angleToClosestPosition = getClosestItemAngle(angle);
             angle += angleToClosestPosition;
