@@ -1,5 +1,7 @@
 package pl.orak.tocv.CircleMenu;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +96,8 @@ public class CircleMenuPresenter {
 
     private void processFling(boolean outOfCircle) {
         float angle = getFlingAngle();
-        if (Math.abs(angle) > 4 || outOfCircle) {
+        Log.d("mytest", " " + getTrackedAngles());
+        if (Math.abs(angle) > 4 || outOfCircle || (getTrackedAngles() > 1)) {
             flingProcessed = true;
             float angleToClosestPosition = getClosestItemAngle(angle);
             angle += angleToClosestPosition;
@@ -124,6 +127,16 @@ public class CircleMenuPresenter {
 
         }
         return -angle;
+    }
+
+    private float getTrackedAngles() {
+        float angle = 0;
+        if (angleInTimeArrayList.size() > 0) {
+            for (int i = angleInTimeArrayList.size() - 1; i >= 0; i--) {
+                angle += Math.abs(angleInTimeArrayList.get(i).angle);
+            }
+        }
+        return angle;
     }
 
     public void onEvent(MenuItemClickedEvent event) {
