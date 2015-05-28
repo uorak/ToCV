@@ -34,7 +34,7 @@ import pl.orak.tocv.Utils;
 public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
 
     private static final int FLING_ANIMATION_DURATION = 800;
-    private static final int CLICK_ANIMATION_DURATION = 800;
+    private static final int CLICK_ANIMATION_DURATION = 600;
     private final TimeInterpolator FLING_INTERPOLATOR = new DecelerateInterpolator(2);
     private final TimeInterpolator CLICK_INTERPOLATOR = new AccelerateDecelerateInterpolator();
     ArrayList<CircleMenuItemViewImpl> circleMenuItemViews = new ArrayList<>();
