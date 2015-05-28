@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
+import pl.orak.tocv.CircleUtils.AngleInTime;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.CircleUtils;
 import pl.orak.tocv.CircleUtils.Point;
@@ -19,16 +20,18 @@ import pl.orak.tocv.Utils;
 public class CircleMenuPresenter {
 
     public static final int ANGLE_TRACKING_TIME = 100;
-    CircleMenuView circleMenuView;
     @Inject
     EventBus eventBus;
+    CircleMenuView circleMenuView;
+
     private List<MyMenuItem> menuItems = new ArrayList<>();
+
     private Point lastPoint;
     private float initialRotation;
     private int offset;
-
     private ArrayList<AngleInTime> angleInTimeArrayList = new ArrayList<>();
     private boolean flingProcessed;
+
     private int selectedItemIndex;
 
     public CircleMenuPresenter(CircleMenuView circleMenuView) {
@@ -135,7 +138,7 @@ public class CircleMenuPresenter {
     private float getAngleToStopPosition(MyMenuItem menuItem, float offsetAngle) {
         float alpha = 360f / menuItems.size();
         float rotation = circleMenuView.getRotation() + offsetAngle;
-        float stopAngle = getStopAngle(circleMenuView.getScreenOrientation());
+        float stopAngle = getStopPositionAngle(circleMenuView.getScreenOrientation());
         float actualAngle = ((menuItems.indexOf(menuItem) * alpha - stopAngle) + rotation) % 360;
         if (actualAngle < 0) {
             actualAngle = 360 + actualAngle;
@@ -163,7 +166,7 @@ public class CircleMenuPresenter {
         return getClosestItemAngle(0);
     }
 
-    private float getStopAngle(Utils.ScreenOrientation screenOrientation) {
+    private float getStopPositionAngle(Utils.ScreenOrientation screenOrientation) {
         if (screenOrientation == Utils.ScreenOrientation.Landscape) {
             return 90;
         } else {
@@ -171,26 +174,9 @@ public class CircleMenuPresenter {
         }
     }
 
-    public void destroy() {
+    public void unregister() {
         eventBus.unregister(this);
     }
 
-    private class AngleInTime {
-        public float angle;
-        public long timestamp;
-
-        public AngleInTime(float angle, long timestamp) {
-            this.angle = angle;
-            this.timestamp = timestamp;
-        }
-
-        @Override
-        public String toString() {
-            return "AngleInTime{" +
-                    "angle=" + angle +
-                    ", timestamp=" + timestamp +
-                    '}';
-        }
-    }
 
 }

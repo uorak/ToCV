@@ -21,7 +21,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import hugo.weaving.DebugLog;
 import pl.orak.tocv.CircleUtils.CircleParams;
 import pl.orak.tocv.CircleUtils.Point;
 import pl.orak.tocv.CircleUtils.Touch;
@@ -40,12 +39,13 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
     private final TimeInterpolator CLICK_INTERPOLATOR = new AccelerateDecelerateInterpolator();
     ArrayList<CircleMenuItemViewImpl> circleMenuItemViews = new ArrayList<>();
     HashMap<View, ViewPropertyAnimator> animatorViewHashMap = new HashMap<>();
+
     @Inject
     List<MyMenuItem> menuItems;
     private CircleMenuPresenter presenter;
+
     private CircleParams circleParams;
     private int selectedItemIndex;
-
 
     public CircleMenuViewImpl(Context context) {
         super(context);
@@ -96,7 +96,6 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
         circleMenuItemViews.add(circleMenuItemView);
     }
 
-    @DebugLog
     @Override
     public void updateMenuItems(float angle, UpdateMenuItemsOption option) {
         rotateView(this, angle, option);
@@ -132,7 +131,6 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
         animatorViewHashMap.get(view).start();
     }
 
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         Touch touch = Touch.fromMotionEvent(event);
@@ -167,7 +165,7 @@ public class CircleMenuViewImpl extends FrameLayout implements CircleMenuView {
     @Override
     protected Parcelable onSaveInstanceState() {
         selectedItemIndex = presenter.getSelectedItemIndex();
-        presenter.destroy();
+        presenter.unregister();
         presenter = null;
         Bundle bundle = new Bundle();
         bundle.putParcelable("instanceState", super.onSaveInstanceState());
